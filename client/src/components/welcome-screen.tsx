@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Target, DollarSign, TrendingUp, School } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -28,10 +29,9 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           <CardHeader>
             <CardTitle className="text-2xl">Welcome!</CardTitle>
             <CardDescription className="text-base leading-relaxed">
-              Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions. 
-              Please tell me a little bit about yourself and your goals. My goal is to make recommendations 
-              that are in your best interest and lead to a degree path that ultimately has jobs that will 
-              not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
+              <ReactMarkdown>
+                Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **College Selection**, **Degree Planning**, **Scholarships & Aid**, and provide **Degree ROI Analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
+              </ReactMarkdown>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
