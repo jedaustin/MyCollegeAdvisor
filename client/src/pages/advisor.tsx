@@ -23,6 +23,7 @@ import { SessionStats } from "@/components/session-stats";
 import { DownloadDialog } from "@/components/download-dialog";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import brandingImage from "@assets/AppBranding_transparent_1762804335175.png";
 
 // Component to render markdown with clickable citation links
 function MarkdownWithCitations({ content, citations }: { content: string; citations?: string[] }) {
@@ -391,6 +392,25 @@ export default function AdvisorPage() {
               <p className="mt-2 text-xs text-muted-foreground">
                 Press Enter to send, Shift+Enter for new line
               </p>
+            </div>
+          </div>
+
+          {/* Footer Branding */}
+          <div className="border-t bg-background py-4">
+            <div className="mx-auto max-w-3xl flex justify-center">
+              <a
+                href="https://www.twingeckos.com/Site/ContactUS"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover-elevate active-elevate-2 rounded-lg transition-transform"
+                data-testid="link-branding"
+              >
+                <img
+                  src={brandingImage}
+                  alt="Twin Geckos Technology Services LLC - Hire me to create an app for you!"
+                  className="h-16 w-auto"
+                />
+              </a>
             </div>
           </div>
         </div>
