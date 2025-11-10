@@ -1,0 +1,24 @@
+# Separate compose file for running migrations
+# Usage: docker compose -f docker-compose.yml -f docker-compose.migrations.yml run --rm migrations
+
+version: '3.8'
+
+services:
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - app-network
+    command: npm run db:push
+    depends_on:
+      postgres:
+        condition: service_healthy

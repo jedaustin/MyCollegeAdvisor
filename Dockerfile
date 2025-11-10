@@ -1,0 +1,59 @@
+# ===== BUILD STAGE =====
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Build both frontend and backend
+RUN npm run build
+
+# This stage can be used for running migrations
+# Usage: docker build --target builder -t app-migrations .
+
+# ===== PRODUCTION STAGE =====
+FROM node:20-alpine
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create non-root user
+RUN adduser -D -u 10001 appuser
+
+WORKDIR /app
+
+# Copy package files and install production dependencies only
+COPY package*.json ./
+RUN npm ci --only=production && \
+    npm cache clean --force
+
+# Copy built application from builder (dist contains both frontend and backend)
+COPY --from=builder --chown=appuser:appuser /app/dist ./dist
+
+# Copy database schema files needed for migrations
+COPY --chown=appuser:appuser db ./db
+COPY --chown=appuser:appuser shared ./shared
+COPY --chown=appuser:appuser drizzle.config.ts ./
+
+# Switch to non-root user
+USER appuser
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Use dumb-init for proper signal handling
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the application
+CMD ["node", "dist/index.js"]
