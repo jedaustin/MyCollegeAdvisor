@@ -136,6 +136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const perplexityData = await perplexityResponse.json();
       const assistantContent = perplexityData.choices?.[0]?.message?.content;
+      const citations = perplexityData.citations || [];
 
       if (!assistantContent) {
         throw new Error("No response from Perplexity AI");
@@ -150,10 +151,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Save assistant response
+      // Save assistant response with citations
       await storage.createMessage({
         role: "assistant",
         content: assistantContent,
+        citations: citations.length > 0 ? citations : undefined,
         sessionId,
       });
 

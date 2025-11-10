@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -8,6 +8,7 @@ export const messages = pgTable("messages", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   role: text("role").notNull(), // 'user' or 'assistant' or 'system'
   content: text("content").notNull(),
+  citations: jsonb("citations"), // Array of citation URLs from Perplexity
   timestamp: timestamp("timestamp").notNull().defaultNow(),
   sessionId: varchar("session_id").notNull(), // Groups messages into conversations
 });

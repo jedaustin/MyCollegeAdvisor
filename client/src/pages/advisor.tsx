@@ -24,6 +24,50 @@ import { DownloadDialog } from "@/components/download-dialog";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+// Component to render markdown with clickable citation links
+function MarkdownWithCitations({ content, citations }: { content: string; citations?: string[] }) {
+  if (!citations || citations.length === 0) {
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
+    );
+  }
+
+  // Replace inline citations [1], [2], etc. with clickable links
+  const processedContent = content.replace(
+    /\[(\d+)\]/g,
+    (match, num) => {
+      const index = parseInt(num) - 1;
+      if (index >= 0 && index < citations.length) {
+        return `[${num}](${citations[index]})`;
+      }
+      return match;
+    }
+  );
+
+  return (
+    <ReactMarkdown 
+      remarkPlugins={[remarkGfm]}
+      components={{
+        a: ({ href, children, ...props }) => (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline font-medium"
+            {...props}
+          >
+            {children}
+          </a>
+        ),
+      }}
+    >
+      {processedContent}
+    </ReactMarkdown>
+  );
+}
+
 export default function AdvisorPage() {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -225,9 +269,10 @@ export default function AdvisorPage() {
                       <div className="p-4">
                         {message.role === 'assistant' ? (
                           <div className="prose prose-sm max-w-none dark:prose-invert [&>*]:text-card-foreground">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {message.content}
-                            </ReactMarkdown>
+                            <MarkdownWithCitations 
+                              content={message.content}
+                              citations={message.citations as string[] | undefined}
+                            />
                           </div>
                         ) : (
                           <div className="prose prose-sm max-w-none dark:prose-invert">
