@@ -261,9 +261,11 @@ export default function AdvisorPage() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
-                            <p className="text-base leading-relaxed text-card-foreground">
-                              Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
-                            </p>
+                            <div className="prose prose-sm max-w-none dark:prose-invert [&>*]:text-card-foreground">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **college selection**, **degree planning**, **scholarships & aid**, and provide **degree ROI analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
+                              </ReactMarkdown>
+                            </div>
                           </div>
                         </div>
                       </div>
