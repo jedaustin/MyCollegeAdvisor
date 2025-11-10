@@ -245,7 +245,27 @@ export default function AdvisorPage() {
                   ))}
                 </div>
               ) : (
-                messages.map((message) => (
+                <>
+                  {messages.length === 0 && (
+                    <Card className="bg-primary/5 border-primary/20">
+                      <div className="p-6">
+                        <div className="flex gap-4">
+                          <Avatar className="h-10 w-10 shrink-0">
+                            <AvatarFallback className="bg-primary/10 text-primary">
+                              <GraduationCap className="h-5 w-5" />
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <p className="text-base leading-relaxed text-card-foreground">
+                              Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                  
+                  {messages.map((message) => (
                   <div
                     key={message.id}
                     className={`flex gap-4 ${
@@ -302,7 +322,8 @@ export default function AdvisorPage() {
                       </Avatar>
                     )}
                   </div>
-                ))
+                  ))}
+                </>
               )}
               
               {sendMessageMutation.isPending && (
