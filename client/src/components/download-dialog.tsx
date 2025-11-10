@@ -221,6 +221,7 @@ export function DownloadDialog({ open, onOpenChange, messages }: DownloadDialogP
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;
     const maxWidth = pageWidth - (margin * 2);
+    const lineHeight = 5;
     let y = margin;
 
     // Header
@@ -251,19 +252,109 @@ export function DownloadDialog({ open, onOpenChange, messages }: DownloadDialogP
       doc.text(`${role} - ${timestamp}`, margin, y);
       y += 7;
 
-      // Content - convert markdown to plain text
+      // Parse markdown to get formatted elements with links
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
-      const plainText = markdownToPlainText(msg.content);
-      const lines = doc.splitTextToSize(plainText, maxWidth);
+      const elements = parseMarkdownForWord(msg.content);
       
-      lines.forEach((line: string) => {
-        if (y > doc.internal.pageSize.getHeight() - 20) {
-          doc.addPage();
-          y = margin;
+      // Process each element (paragraph or list)
+      elements.forEach(element => {
+        if (element.type === 'paragraph' && element.runs) {
+          // Process runs in this paragraph
+          let currentX = margin;
+          
+          element.runs.forEach(run => {
+            // Check if we need a new page
+            if (y > doc.internal.pageSize.getHeight() - 20) {
+              doc.addPage();
+              y = margin;
+              currentX = margin;
+            }
+            
+            // Set font style
+            doc.setFont('helvetica', run.bold ? 'bold' : 'normal');
+            
+            // Split text to fit width
+            const remainingWidth = maxWidth - (currentX - margin);
+            const textLines = doc.splitTextToSize(run.text, remainingWidth);
+            
+            textLines.forEach((line: string, lineIndex: number) => {
+              if (lineIndex > 0) {
+                y += lineHeight;
+                currentX = margin;
+                
+                if (y > doc.internal.pageSize.getHeight() - 20) {
+                  doc.addPage();
+                  y = margin;
+                }
+              }
+              
+              if (run.link) {
+                // Add clickable link
+                doc.setTextColor(0, 0, 255); // Blue color for links
+                const textWidth = doc.getTextWidth(line);
+                doc.textWithLink(line, currentX, y, { url: run.link });
+                doc.setTextColor(0, 0, 0); // Reset to black
+                currentX += textWidth;
+              } else {
+                // Regular text
+                doc.text(line, currentX, y);
+                currentX += doc.getTextWidth(line);
+              }
+            });
+          });
+          
+          y += lineHeight + 3; // Add spacing after paragraph
+          
+        } else if (element.type === 'list' && element.items) {
+          // Process list items
+          element.items.forEach(itemRuns => {
+            if (y > doc.internal.pageSize.getHeight() - 20) {
+              doc.addPage();
+              y = margin;
+            }
+            
+            // Add bullet
+            doc.text('•', margin, y);
+            let currentX = margin + 8;
+            
+            // Process runs in this list item
+            itemRuns.forEach(run => {
+              doc.setFont('helvetica', run.bold ? 'bold' : 'normal');
+              
+              const remainingWidth = maxWidth - (currentX - margin);
+              const textLines = doc.splitTextToSize(run.text, remainingWidth);
+              
+              textLines.forEach((line: string, lineIndex: number) => {
+                if (lineIndex > 0) {
+                  y += lineHeight;
+                  currentX = margin + 8;
+                  
+                  if (y > doc.internal.pageSize.getHeight() - 20) {
+                    doc.addPage();
+                    y = margin;
+                    currentX = margin + 8;
+                  }
+                }
+                
+                if (run.link) {
+                  doc.setTextColor(0, 0, 255);
+                  const textWidth = doc.getTextWidth(line);
+                  doc.textWithLink(line, currentX, y, { url: run.link });
+                  doc.setTextColor(0, 0, 0);
+                  currentX += textWidth;
+                } else {
+                  doc.text(line, currentX, y);
+                  currentX += doc.getTextWidth(line);
+                }
+              });
+            });
+            
+            y += lineHeight + 2;
+          });
+          
+          y += 3; // Extra spacing after list
         }
-        doc.text(line, margin, y);
-        y += 5;
       });
 
       y += 10;
