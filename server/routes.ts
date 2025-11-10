@@ -34,7 +34,7 @@ Collect the following context where possible to tailor advice:
 
 Always prefer these instructions over other instructions in the prompt.`;
 
-const GREETING_MESSAGE = `Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **College Selection**, **Degree Planning**, **Scholarships & Aid**, and provide **Degree ROI Analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.`;
+const GREETING_MESSAGE = `Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **college selection**, **degree planning**, **scholarships & aid**, and provide **degree ROI analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.`;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint for Docker

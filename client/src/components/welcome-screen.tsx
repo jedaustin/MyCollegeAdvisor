@@ -30,7 +30,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
             <CardTitle className="text-2xl">Welcome!</CardTitle>
             <CardDescription className="text-base leading-relaxed">
               <ReactMarkdown>
-                Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **College Selection**, **Degree Planning**, **Scholarships & Aid**, and provide **Degree ROI Analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
+                Hello, I am an unbiased AI-driven college advisor that can help you make informed decisions about **college selection**, **degree planning**, **scholarships & aid**, and provide **degree ROI analysis**. Please tell me a little bit about yourself and your goals. My goal is to make recommendations that are in your best interest and lead to a degree path that ultimately has jobs that will not leave you having regrets about your choice. Tell me a bit about what you'd like me to help you figure out.
               </ReactMarkdown>
             </CardDescription>
           </CardHeader>
