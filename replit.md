@@ -4,7 +4,7 @@
 
 Personal College Advisor is an AI-powered conversational application designed to help high school students make informed decisions about college selection, degree programs, scholarships, and career outcomes. The system provides unbiased guidance by analyzing student context (financial situation, academic interests, career goals) and delivering personalized recommendations with supporting data on costs, ROI, job placement rates, and post-graduation outcomes.
 
-The application presents a ChatGPT-inspired conversational interface where students interact with an AI advisor through a clean, focused chat experience. The system emphasizes clarity, trust, and utility over visual embellishment.
+The application presents a ChatGPT-inspired conversational interface where students interact with an AI advisor through a clean, focused chat experience. Students can download their consultation sessions in multiple professional formats (Markdown, PDF, Word) for future reference. The system emphasizes clarity, trust, and utility over visual embellishment.
 
 ## User Preferences
 
@@ -110,6 +110,10 @@ Currently, the application does not implement authentication. Sessions are ident
 - **Class Variance Authority (CVA)**: Component variant management
 - **Lucide React**: Icon library
 
+**Document Generation:**
+- **jsPDF**: Client-side PDF generation for downloadable transcripts
+- **docx**: Microsoft Word document generation for editable session exports
+
 **Form & Validation:**
 - **React Hook Form**: Form state management
 - **Zod**: Runtime type validation and schema definition
@@ -130,6 +134,22 @@ Currently, the application does not implement authentication. Sessions are ident
 - **CMDK**: Command menu component library
 - **Vaul**: Drawer component for mobile interfaces
 
+### Key Features
+
+**Download Functionality:**
+Students can export their complete conversation history in three professional formats:
+- **Markdown (.md)**: Clean, readable plain text with formatting and metadata
+- **PDF (.pdf)**: Professional document format suitable for printing and sharing
+- **Word (.docx)**: Editable Microsoft Word document for further annotation
+
+All formats include:
+- Session metadata (generation timestamp, message count)
+- Full conversation history with timestamps
+- Proper role identification (Student vs. Advisor)
+- Professional formatting for easy reading
+
+Files are generated entirely client-side using jsPDF and docx libraries, ensuring privacy and instant download without server processing.
+
 ### Design Decisions
 
 **Conversational Interface Choice:**
@@ -138,6 +158,14 @@ The application uses a chat-based interface rather than traditional forms becaus
 - Allows AI to ask clarifying questions dynamically based on context
 - Mirrors successful conversational AI patterns (ChatGPT, Claude)
 - Reduces cognitive load compared to long multi-step forms
+
+**Download Format Selection:**
+Markdown, PDF, and Word formats chosen over JSON because:
+- Students need human-readable documents for review and sharing with parents/counselors
+- PDF provides professional format for printing and official documentation
+- Word documents allow students to add notes and annotations
+- Markdown offers lightweight, future-proof plain text with formatting
+- JSON was too technical and not useful for the target audience (high school students)
 
 **Session-Based Architecture:**
 Sessions are client-generated UUIDs rather than server-assigned because:
