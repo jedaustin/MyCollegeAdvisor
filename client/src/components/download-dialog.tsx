@@ -523,24 +523,6 @@ export function DownloadDialog({ open, onOpenChange, messages }: DownloadDialogP
           <Button
             variant="outline"
             className="w-full justify-start gap-3"
-            onClick={downloadAsMarkdown}
-            data-testid="button-download-markdown"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <FileText className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1 text-left">
-              <p className="font-semibold">Markdown (.md)</p>
-              <p className="text-sm text-muted-foreground">
-                Plain text with formatting for easy reading
-              </p>
-            </div>
-            <Download className="h-4 w-4" />
-          </Button>
-
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-3"
             onClick={downloadAsPDF}
             data-testid="button-download-pdf"
           >
@@ -569,6 +551,24 @@ export function DownloadDialog({ open, onOpenChange, messages }: DownloadDialogP
               <p className="font-semibold">Word Document (.docx)</p>
               <p className="text-sm text-muted-foreground">
                 Editable document for Microsoft Word
+              </p>
+            </div>
+            <Download className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="outline"
+            className="w-full justify-start gap-3"
+            onClick={downloadAsMarkdown}
+            data-testid="button-download-markdown"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="font-semibold">Markdown (.md)</p>
+              <p className="text-sm text-muted-foreground">
+                Plain text with formatting for easy reading
               </p>
             </div>
             <Download className="h-4 w-4" />
