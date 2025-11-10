@@ -71,9 +71,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.createSession(sessionId);
       }
 
-      // Check if this is the first message in the session
+      // Get conversation history
       const conversationHistory = await storage.getMessagesBySession(sessionId);
-      const isFirstMessage = conversationHistory.length === 0;
 
       // Save user message
       const userMessage = await storage.createMessage({
@@ -91,8 +90,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       ];
 
-      // Add conversation history (excluding the greeting message and system messages)
-      // We skip the greeting because it's just for display, not part of the actual conversation with AI
+      // Add conversation history (excluding system messages and any stored greeting messages from old sessions)
       for (const msg of conversationHistory) {
         if (msg.role !== "system" && msg.content !== GREETING_MESSAGE) {
           perplexityMessages.push({
@@ -140,15 +138,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!assistantContent) {
         throw new Error("No response from Perplexity AI");
-      }
-
-      // If first message, save the greeting first (so it appears before the AI response in chat)
-      if (isFirstMessage) {
-        await storage.createMessage({
-          role: "assistant",
-          content: GREETING_MESSAGE,
-          sessionId,
-        });
       }
 
       // Save assistant response with citations

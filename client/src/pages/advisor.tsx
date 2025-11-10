@@ -187,7 +187,7 @@ export default function AdvisorPage() {
   const hasStartedConversation = messages.length > 0;
 
   // Hide welcome screen once conversation starts or user clicks start
-  const shouldShowWelcome = showWelcome && !hasStartedConversation && !isLoading;
+  const shouldShowWelcome = showWelcome && !hasStartedConversation;
 
   if (shouldShowWelcome) {
     return (
