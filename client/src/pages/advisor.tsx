@@ -36,7 +36,11 @@ function MarkdownWithCitations({ content, citations }: { content: string; citati
   }
 
   // Replace inline citations [1], [2], etc. with clickable links
-  const processedContent = content.replace(
+  // First, add space before citations that don't have one
+  let processedContent = content.replace(/(\S)(\[\d+\])/g, '$1 $2');
+  
+  // Then convert citations to markdown links
+  processedContent = processedContent.replace(
     /\[(\d+)\]/g,
     (match, num) => {
       const index = parseInt(num) - 1;
