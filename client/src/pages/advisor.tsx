@@ -21,6 +21,8 @@ import type { Message } from "@shared/schema";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { SessionStats } from "@/components/session-stats";
 import { DownloadDialog } from "@/components/download-dialog";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function AdvisorPage() {
   const [input, setInput] = useState("");
@@ -221,13 +223,19 @@ export default function AdvisorPage() {
                         : 'bg-card'
                     }`}>
                       <div className="p-4">
-                        <div className="prose prose-sm max-w-none dark:prose-invert">
-                          <p className={`whitespace-pre-wrap text-base leading-relaxed ${
-                            message.role === 'user' ? 'text-primary-foreground' : 'text-card-foreground'
-                          }`}>
-                            {message.content}
-                          </p>
-                        </div>
+                        {message.role === 'assistant' ? (
+                          <div className="prose prose-sm max-w-none dark:prose-invert [&>*]:text-card-foreground">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {message.content}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <div className="prose prose-sm max-w-none dark:prose-invert">
+                            <p className="whitespace-pre-wrap text-base leading-relaxed text-primary-foreground">
+                              {message.content}
+                            </p>
+                          </div>
+                        )}
                         <p className={`mt-2 text-xs ${
                           message.role === 'user' 
                             ? 'text-primary-foreground/70' 
