@@ -21,8 +21,8 @@ RUN npm run build
 # ===== PRODUCTION STAGE =====
 FROM node:20-alpine
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# Install dumb-init for proper signal handling and psql client for migrations
+RUN apk add --no-cache dumb-init postgresql15-client
 
 # Create non-root user
 RUN adduser -D -u 10001 appuser
@@ -37,10 +37,13 @@ RUN npm ci --only=production && \
 # Copy built application from builder (dist contains both frontend and backend)
 COPY --from=builder --chown=appuser:appuser /app/dist ./dist
 
-# Copy database schema files needed for migrations
+# Copy database schema files and migrations needed for startup
 COPY --chown=appuser:appuser db ./db
 COPY --chown=appuser:appuser shared ./shared
+COPY --chown=appuser:appuser migrations ./migrations
+COPY --chown=appuser:appuser scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
 COPY --chown=appuser:appuser drizzle.config.ts ./
+RUN chmod +x ./scripts/docker-entrypoint.sh
 
 # Default runtime port for the web server
 ENV WEB_PORT=6000
@@ -58,5 +61,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Use dumb-init for proper signal handling
 ENTRYPOINT ["dumb-init", "--"]
 
-# Start the application
-CMD ["node", "dist/index.js"]
+# Start the application (runs DB initialization/migrations first)
+CMD ["scripts/docker-entrypoint.sh"]
