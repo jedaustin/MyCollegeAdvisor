@@ -59,7 +59,7 @@ apply_sql_migrations() {
   if [ ! -d "./migrations" ]; then
     echo "No migrations directory found; skipping schema sync."
     return
-  }
+  fi
 
   for file in ./migrations/*.sql; do
     [ -f "$file" ] || continue

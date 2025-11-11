@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${WEB_PORT:-5551}:5551"
+      - "${WEB_PORT:-5551}:${WEB_PORT:-5551}"
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:${POSTGRES_INTERNAL_PORT:-5432}/${POSTGRES_DB:-college_advisor}
