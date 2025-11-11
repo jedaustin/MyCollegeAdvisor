@@ -46,17 +46,17 @@ COPY --chown=appuser:appuser drizzle.config.ts ./
 RUN chmod +x ./scripts/docker-entrypoint.sh
 
 # Default runtime port for the web server
-ENV WEB_PORT=6000
+ENV WEB_PORT=5551
 
 # Switch to non-root user
 USER appuser
 
 # Expose port
-EXPOSE 6000
+EXPOSE 5551
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "const port = process.env.WEB_PORT || 6000; require('http').get('http://localhost:' + port + '/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+  CMD node -e "const port = process.env.WEB_PORT || 5551; require('http').get('http://localhost:' + port + '/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Use dumb-init for proper signal handling
 ENTRYPOINT ["dumb-init", "--"]
