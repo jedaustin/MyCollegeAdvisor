@@ -8,9 +8,9 @@ services:
       dockerfile: Dockerfile
       target: builder
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-college_advisor}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:${POSTGRES_INTERNAL_PORT:-5432}/${POSTGRES_DB:-college_advisor}
       PGHOST: postgres
-      PGPORT: ${POSTGRES_PORT:-5432}
+      PGPORT: ${POSTGRES_INTERNAL_PORT:-5432}
       PGDATABASE: ${POSTGRES_DB:-college_advisor}
       PGUSER: ${POSTGRES_USER:-postgres}
       PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
