@@ -42,15 +42,18 @@ COPY --chown=appuser:appuser db ./db
 COPY --chown=appuser:appuser shared ./shared
 COPY --chown=appuser:appuser drizzle.config.ts ./
 
+# Default runtime port for the web server
+ENV WEB_PORT=6000
+
 # Switch to non-root user
 USER appuser
 
 # Expose port
-EXPOSE 5000
+EXPOSE 6000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:5000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+  CMD node -e "const port = process.env.WEB_PORT || 6000; require('http').get('http://localhost:' + port + '/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Use dumb-init for proper signal handling
 ENTRYPOINT ["dumb-init", "--"]
